@@ -5,10 +5,10 @@ const Counter = () => {
   let[count,setCount]=useState(0)
 
   let increase=()=>{
-    setCount(count+1)
+    setCount(preCount=>count+1)
   }
   let decrease=()=>{
-    setCount(count-1)
+     setCount(preCount=>count-1)
   }
 
   return (
