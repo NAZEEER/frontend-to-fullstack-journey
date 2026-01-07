@@ -6,6 +6,7 @@ import Counter from "./Components/Counter";
 import InputForm from "./Components/InputForm";
 import ToDoList from "./components2/To-Do-List";
 import ToggleMessage from "./components2/ToggleMessage";
+import Parent from "./componets-Parent-Child/Parent";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
       <Button text="Click Me" />
       <ToDoList/>
       <ToggleMessage/>
+      <Parent/>
     </div>
   );
 }
