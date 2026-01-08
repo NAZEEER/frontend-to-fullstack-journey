@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import ChildA from './ChildA'
-import ChildB from './ChildB'
+import ChildA from './ChildA';
+import ChildB from './ChildB';
 
 const LiftParent = () => {
     const[count,setCount]=useState(0)

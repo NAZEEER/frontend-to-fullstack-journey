@@ -8,6 +8,7 @@ import ToDoList from "./components2/To-Do-List";
 import ToggleMessage from "./components2/ToggleMessage";
 import Parent from "./componets-Parent-Child/Parent";
 import LiftParent from "./component3/LiftParent";
+import FormControl from "./components4/FormControl";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
       <ToggleMessage/>
       <Parent/>
       <LiftParent/>
+      <FormControl/>
     </div>
   );
 }
