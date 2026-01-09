@@ -9,6 +9,7 @@ import ToggleMessage from "./components2/ToggleMessage";
 import Parent from "./componets-Parent-Child/Parent";
 import LiftParent from "./component3/LiftParent";
 import FormControl from "./components4/FormControl";
+import FetchUsers from "./component-Day10/FetchUsers";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
       <Parent/>
       <LiftParent/>
       <FormControl/>
+      <FetchUsers/>
     </div>
   );
 }
