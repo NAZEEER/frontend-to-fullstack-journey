@@ -10,6 +10,7 @@ import Parent from "./componets-Parent-Child/Parent";
 import LiftParent from "./component3/LiftParent";
 import FormControl from "./components4/FormControl";
 import FetchUsers from "./component-Day10/FetchUsers";
+import ReFetch from "./component-Day11/ReFetch";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
       <LiftParent/>
       <FormControl/>
       <FetchUsers/>
+      <ReFetch/>
     </div>
   );
 }
