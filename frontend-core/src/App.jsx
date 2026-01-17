@@ -12,6 +12,7 @@ import FormControl from "./components4/FormControl";
 import FetchUsers from "./component-Day10/FetchUsers";
 import ReFetch from "./component-Day11/ReFetch";
 import FetchRebuild from "./component-Day11/FetchRebuild";
+import ProductsPage from "./componet-Day13-hooks/ProductsPage";
 
 function App() {
   return (
@@ -27,14 +28,15 @@ function App() {
       <Counter />
 
       <Button text="Click Me" />
-      <ToDoList/>
-      <ToggleMessage/>
-      <Parent/>
-      <LiftParent/>
-      <FormControl/>
+      <ToDoList />
+      <ToggleMessage />
+      <Parent />
+      <LiftParent />
+      <FormControl />
       {/* <FetchUsers/> */}
       {/* <ReFetch/> */}
-      <FetchRebuild/>
+      {/* <FetchRebuild/> */}
+      <ProductsPage/>
     </div>
   );
 }
