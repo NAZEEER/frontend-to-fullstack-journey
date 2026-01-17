@@ -11,6 +11,7 @@ import LiftParent from "./component3/LiftParent";
 import FormControl from "./components4/FormControl";
 import FetchUsers from "./component-Day10/FetchUsers";
 import ReFetch from "./component-Day11/ReFetch";
+import FetchRebuild from "./component-Day11/FetchRebuild";
 
 function App() {
   return (
@@ -31,8 +32,9 @@ function App() {
       <Parent/>
       <LiftParent/>
       <FormControl/>
-      <FetchUsers/>
-      <ReFetch/>
+      {/* <FetchUsers/> */}
+      {/* <ReFetch/> */}
+      <FetchRebuild/>
     </div>
   );
 }
