@@ -15,6 +15,8 @@ import FetchRebuild from "./component-Day11/FetchRebuild";
 import ProductsPage from "./componet-Day13-hooks/ProductsPage";
 import FormValidation from "./component-Day14/FormValidation";
 import ParentCounter from "./component-Day15/ParentCounter";
+import Product from "./component-Day16/Product";
+import TinyProject from "./component-Day17/TinyProject";
 
 function App() {
   return (
@@ -41,6 +43,8 @@ function App() {
       {/* <ProductsPage/> */}
       <FormValidation/>
       <ParentCounter/>
+      {/* <Product/> */}
+      <TinyProject/>
     </div>
   );
 }
