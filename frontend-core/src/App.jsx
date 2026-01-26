@@ -17,11 +17,12 @@ import FormValidation from "./component-Day14/FormValidation";
 import ParentCounter from "./component-Day15/ParentCounter";
 import Product from "./component-Day16/Product";
 import TinyProject from "./component-Day17/TinyProject";
+import ProductList from "./component-Day18/ProductList";
 
 function App() {
   return (
     <div>
-      <Header name="Nazeer" />
+      {/* <Header name="Nazeer" />
 
       <Card
         title="Frontend Journey"
@@ -41,10 +42,11 @@ function App() {
       {/* <ReFetch/> */}
       {/* <FetchRebuild/> */}
       {/* <ProductsPage/> */}
-      <FormValidation/>
-      <ParentCounter/>
+      {/* <FormValidation/> */}
+      {/* <ParentCounter/> */}
       {/* <Product/> */}
-      <TinyProject/>
+      {/* <TinyProject/>  */}
+      <ProductList/>
     </div>
   );
 }
