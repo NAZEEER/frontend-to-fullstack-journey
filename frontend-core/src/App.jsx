@@ -18,19 +18,20 @@ import ParentCounter from "./component-Day15/ParentCounter";
 import Product from "./component-Day16/Product";
 import TinyProject from "./component-Day17/TinyProject";
 import ProductList from "./component-Day18/ProductList";
+import ProductLyst from "./component-Day20/ProductLyst";
 
 function App() {
   return (
     <div>
-      {/* <Header name="Nazeer" />
+      <Header name="Nazeer" />
 
       <Card
         title="Frontend Journey"
         description="Learning React the right way"
       />
 
-      <InputForm />
-      <Counter />
+      {/* <InputForm />
+      <Counter/>
 
       <Button text="Click Me" />
       <ToDoList />
@@ -38,15 +39,16 @@ function App() {
       <Parent />
       <LiftParent />
       <FormControl />
-      {/* <FetchUsers/> */}
-      {/* <ReFetch/> */}
-      {/* <FetchRebuild/> */}
-      {/* <ProductsPage/> */}
-      {/* <FormValidation/> */}
-      {/* <ParentCounter/> */}
-      {/* <Product/> */}
-      {/* <TinyProject/>  */}
-      <ProductList/>
+      <FetchUsers/>
+      <ReFetch/>
+      <FetchRebuild/>
+      <ProductsPage/>
+      <FormValidation/>
+      <ParentCounter/>
+      <Product/>
+       <TinyProject/>  */}
+      {/* <ProductList /> */}
+      <ProductLyst/>
     </div>
   );
 }
