@@ -30,8 +30,8 @@ const WatchList = () => {
   if (filteredProducts.length === 0) return <p>The Item Is Not Found</p>;
 
   return (
-    <div>
-      <div className="controls">
+    <div className="controls">
+      <div >
         <input
           type="text"
           value={search}
