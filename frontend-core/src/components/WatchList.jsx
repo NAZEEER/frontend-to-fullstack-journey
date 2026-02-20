@@ -8,12 +8,12 @@ const WatchList = () => {
 
   useEffect(() => {
     fetch("https://dummyjson.com/products/category/mens-watches")
-        .then((res) => {
-      if (!res.ok) {
-        throw new Error("Failed to fetch watches");
-      }
-      return res.json();
-    })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("Failed to fetch watches");
+        }
+        return res.json();
+      })
 
       .then((data) => {
         setProducts(data.products);
@@ -29,20 +29,9 @@ const WatchList = () => {
     p.title.toLowerCase().includes(search.toLowerCase()),
   );
 
-  if (loading) return <p>Loading...</p>;
-  if (error) {
-    return (
-      <div className="state">
-        <p> Error :{error} </p>
-      </div>
-    );
-  }
-
-  if (filteredProducts.length === 0) return <p>The Item Is Not Found</p>;
-
   return (
-    <div className="controls">
-      <div>
+    <div className="page">
+      <div className="controls">
         <input
           type="text"
           value={search}
@@ -50,17 +39,37 @@ const WatchList = () => {
           placeholder="Search watches"
         />
       </div>
-
-      <div className="product">
-        {filteredProducts.map((item) => (
-          <div className="card" key={item.id}>
-            <img src={item.thumbnail} alt={item.title} />
-            <h4>{item.title}</h4>
-            <p>₹ {item.price}</p>
+      <main className="main">
+        {loading && (
+          <div>
+            <p>Loading...</p>
           </div>
-        ))}
-      </div>
-      <p>-That's all for now-</p>
+        )}
+        {!loading && error && (
+          <div>
+            <p>Error:{error}</p>
+          </div>
+        )}
+        {!loading && !error && filteredProducts.length === 0 && (
+          <div className="state">
+            <p>Item not found</p>
+          </div>
+        )}
+        {!loading && !error && filteredProducts.length > 0 && (
+          <>
+            <div className="product">
+              {filteredProducts.map((item) => (
+                <div className="card" key={item.id}>
+                  <img src={item.thumbnail} alt={item.title} />
+                  <h4>{item.title}</h4>
+                  <p>₹ {item.price}</p>
+                </div>
+              ))}
+              <p>-That's all for now-</p>
+            </div>
+          </>
+        )}
+      </main>
     </div>
   );
 };
