@@ -43,9 +43,16 @@ input {
 .card p{
   margin-top: 10px;
 }
+.state {
+  min-height: 60vh;        /* owns vertical space */
+  display: flex;
+  align-items: center;    /* vertical center */
+  justify-content: center;/* horizontal center */
+}
 
 @media (min-width: 768px) {
   .product {
     grid-template-columns: repeat(4, 1fr);
   }
 }
+

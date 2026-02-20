@@ -8,7 +8,12 @@ const WatchList = () => {
 
   useEffect(() => {
     fetch("https://dummyjson.com/products/category/mens-watches")
-      .then((res) => res.json())
+        .then((res) => {
+      if (!res.ok) {
+        throw new Error("Failed to fetch watches");
+      }
+      return res.json();
+    })
 
       .then((data) => {
         setProducts(data.products);
@@ -24,14 +29,20 @@ const WatchList = () => {
     p.title.toLowerCase().includes(search.toLowerCase()),
   );
 
-  
   if (loading) return <p>Loading...</p>;
-  if (error) return <p> Error :{error} </p>;
+  if (error) {
+    return (
+      <div className="state">
+        <p> Error :{error} </p>
+      </div>
+    );
+  }
+
   if (filteredProducts.length === 0) return <p>The Item Is Not Found</p>;
 
   return (
     <div className="controls">
-      <div >
+      <div>
         <input
           type="text"
           value={search}
@@ -49,6 +60,7 @@ const WatchList = () => {
           </div>
         ))}
       </div>
+      <p>-That's all for now-</p>
     </div>
   );
 };
