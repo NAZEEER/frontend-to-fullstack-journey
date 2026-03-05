@@ -30,9 +30,11 @@ const WatchList = () => {
     setOpenCardId((prev) => (prev === id ? null : id));
   };
 
-  const filteredProducts = products.filter((p) =>
-    p.title.toLowerCase().includes(search.toLowerCase()),
-  );
+  const filteredProducts= products.filter((product)=>{
+    const title= product.title.toLowerCase()
+    const query = search.toLowerCase();
+    return title.includes(query)
+  })
 
   return (
     <div className="page">
@@ -71,7 +73,7 @@ const WatchList = () => {
                   price={item.price}
                   stock={item.stock}
                   image={item.thumbnail}
-                  openCardId={openCardId}
+                  isOpen={openCardId === item.id}
                   handleToggle={handleToggle}
                 />
               ))}

@@ -1,10 +1,8 @@
 import React from "react";
 
-const Card = ({ id, title, price, stock, image, openCardId, handleToggle }) => {
-  const isOpen = id === openCardId;
-
+const Card = ({ id, title, price, stock, image, isOpen, handleToggle }) => {
   return (
-    <div className="card">
+    <div className={`card ${isOpen ? "isOpen" : ""}`}>
       <img src={image} alt={title} />
       <h4>{title}</h4>
       <p>₹ {price}</p>
