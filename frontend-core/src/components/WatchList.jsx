@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
+import Card from "./Card";
 
 const WatchList = () => {
   const [products, setProducts] = useState([]);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [openCardId, setOpenCardId] = useState(null);
 
   useEffect(() => {
     fetch("https://dummyjson.com/products/category/mens-watches")
@@ -24,6 +26,9 @@ const WatchList = () => {
         setLoading(false);
       });
   }, []);
+  const handleToggle = (id) => {
+    setOpenCardId((prev) => (prev === id ? null : id));
+  };
 
   const filteredProducts = products.filter((p) =>
     p.title.toLowerCase().includes(search.toLowerCase()),
@@ -41,12 +46,12 @@ const WatchList = () => {
       </div>
       <main className="main">
         {loading && (
-          <div>
+          <div className="state">
             <p>Loading...</p>
           </div>
         )}
         {!loading && error && (
-          <div>
+          <div className="state">
             <p>Error:{error}</p>
           </div>
         )}
@@ -59,14 +64,19 @@ const WatchList = () => {
           <>
             <div className="product">
               {filteredProducts.map((item) => (
-                <div className="card" key={item.id}>
-                  <img src={item.thumbnail} alt={item.title} />
-                  <h4>{item.title}</h4>
-                  <p>₹ {item.price}</p>
-                </div>
+                <Card
+                  key={item.id}
+                  id={item.id}
+                  title={item.title}
+                  price={item.price}
+                  stock={item.stock}
+                  image={item.thumbnail}
+                  openCardId={openCardId}
+                  handleToggle={handleToggle}
+                />
               ))}
-              <p>-That's all for now-</p>
             </div>
+            <p>-That's all for now-</p>
           </>
         )}
       </main>

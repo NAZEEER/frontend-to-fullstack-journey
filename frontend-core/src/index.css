@@ -37,18 +37,14 @@ input {
   font-size: larger;
 }
 
-.card:active {
-  background-color: rgb(235, 234, 234);
-}
-.card p{
-  margin-top: 10px;
-}
+
 .state {
   min-height: 60vh;        /* owns vertical space */
   display: flex;
   align-items: center;    /* vertical center */
   justify-content: center;/* horizontal center */
 }
+
 
 @media (min-width: 768px) {
   .product {
