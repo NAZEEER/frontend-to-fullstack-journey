@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Card from "./Card";
+import SkeletonCards from "./SkeletonCards";
 
 const WatchList = () => {
   const [products, setProducts] = useState([]);
@@ -30,11 +31,11 @@ const WatchList = () => {
     setOpenCardId((prev) => (prev === id ? null : id));
   };
 
-  const filteredProducts= products.filter((product)=>{
-    const title= product.title.toLowerCase()
+  const filteredProducts = products.filter((product) => {
+    const title = product.title.toLowerCase();
     const query = search.toLowerCase();
-    return title.includes(query)
-  })
+    return title.includes(query);
+  });
 
   return (
     <div className="page">
@@ -47,11 +48,7 @@ const WatchList = () => {
         />
       </div>
       <main className="main">
-        {loading && (
-          <div className="state">
-            <p>Loading...</p>
-          </div>
-        )}
+        {loading && <SkeletonCards />}
         {!loading && error && (
           <div className="state">
             <p>Error:{error}</p>
@@ -75,6 +72,7 @@ const WatchList = () => {
                   image={item.thumbnail}
                   isOpen={openCardId === item.id}
                   handleToggle={handleToggle}
+                  
                 />
               ))}
             </div>
