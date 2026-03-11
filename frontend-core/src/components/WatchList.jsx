@@ -8,6 +8,7 @@ const WatchList = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [openCardId, setOpenCardId] = useState(null);
+  const [visibleCount, setVisibleCount] = useState(4);
 
   useEffect(() => {
     fetch("https://dummyjson.com/products/category/mens-watches")
@@ -29,6 +30,9 @@ const WatchList = () => {
   }, []);
   const handleToggle = (id) => {
     setOpenCardId((prev) => (prev === id ? null : id));
+  };
+  const increase = () => {
+    setVisibleCount((prev) => prev + 4);
   };
 
   const filteredProducts = products.filter((product) => {
@@ -62,7 +66,7 @@ const WatchList = () => {
         {!loading && !error && filteredProducts.length > 0 && (
           <>
             <div className="product">
-              {filteredProducts.map((item) => (
+              {filteredProducts.slice(0, visibleCount).map((item) => (
                 <Card
                   key={item.id}
                   id={item.id}
@@ -72,10 +76,15 @@ const WatchList = () => {
                   image={item.thumbnail}
                   isOpen={openCardId === item.id}
                   handleToggle={handleToggle}
-                  
                 />
               ))}
             </div>
+            {visibleCount <
+              filteredProducts.length && (
+                <div>
+                  <button onClick={increase}>Load More</button>
+                </div>
+              )}
             <p>-That's all for now-</p>
           </>
         )}
