@@ -4,7 +4,8 @@ import SkeletonCards from "./SkeletonCards";
 
 const WatchList = () => {
   const [products, setProducts] = useState([]);
-  const [search, setSearch] = useState("");
+  const [searchInput, setSearchInput] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [openCardId, setOpenCardId] = useState(null);
@@ -28,6 +29,17 @@ const WatchList = () => {
         setLoading(false);
       });
   }, []);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(searchInput);
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [searchInput]);
+
+  useEffect(() => {
+    setVisibleCount(4);
+  }, [debouncedSearch]);
+
   const handleToggle = (id) => {
     setOpenCardId((prev) => (prev === id ? null : id));
   };
@@ -37,17 +49,18 @@ const WatchList = () => {
 
   const filteredProducts = products.filter((product) => {
     const title = product.title.toLowerCase();
-    const query = search.toLowerCase();
+    const query = debouncedSearch.toLowerCase();
     return title.includes(query);
   });
+  const visibleProducts = filteredProducts.slice(0, visibleCount);
 
   return (
     <div className="page">
       <div className="controls">
         <input
           type="text"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          value={searchInput}
+          onChange={(e) => setSearchInput(e.target.value)}
           placeholder="Search watches"
         />
       </div>
@@ -66,7 +79,7 @@ const WatchList = () => {
         {!loading && !error && filteredProducts.length > 0 && (
           <>
             <div className="product">
-              {filteredProducts.slice(0, visibleCount).map((item) => (
+              {visibleProducts.map((item) => (
                 <Card
                   key={item.id}
                   id={item.id}
@@ -79,13 +92,17 @@ const WatchList = () => {
                 />
               ))}
             </div>
-            {visibleCount <
-              filteredProducts.length && (
+            {visibleCount < filteredProducts.length && (
+              <div>
+                <button onClick={increase}>Load More</button>
+              </div>
+            )}
+            {filteredProducts.length > 0 &&
+              visibleCount >= filteredProducts.length && (
                 <div>
-                  <button onClick={increase}>Load More</button>
+                  <p>-That's all for now-</p>
                 </div>
               )}
-            <p>-That's all for now-</p>
           </>
         )}
       </main>
