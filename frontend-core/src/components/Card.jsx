@@ -16,4 +16,4 @@ const Card = ({ id, title, price, stock, image, isOpen, handleToggle }) => {
   );
 };
 
-export default Card;
+export default React.memo(Card);

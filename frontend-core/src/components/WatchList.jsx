@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import Card from "./Card";
 import SkeletonCards from "./SkeletonCards";
 
@@ -40,19 +40,24 @@ const WatchList = () => {
     setVisibleCount(4);
   }, [debouncedSearch]);
 
-  const handleToggle = (id) => {
+  const handleToggle = useCallback((id) => {
     setOpenCardId((prev) => (prev === id ? null : id));
-  };
+  }, []);
   const increase = () => {
     setVisibleCount((prev) => prev + 4);
   };
 
-  const filteredProducts = products.filter((product) => {
-    const title = product.title.toLowerCase();
-    const query = debouncedSearch.toLowerCase();
-    return title.includes(query);
-  });
-  const visibleProducts = filteredProducts.slice(0, visibleCount);
+  const filteredProducts = useMemo(() => {
+    products.filter((product) => {
+      const title = product.title.toLowerCase();
+      const query = debouncedSearch.toLowerCase();
+      return title.includes(query);
+    });
+  }, [products, debouncedSearch]);
+
+  const visibleProducts = useCallback(() => {
+    filteredProducts.slice(0, visibleCount);
+  }, [filteredProducts, visibleCount]);
 
   return (
     <div className="page">
