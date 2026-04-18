@@ -9,17 +9,15 @@ const WatchList = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [openCardId, setOpenCardId] = useState(null);
-  const [visibleCount, setVisibleCount] = useState(4);
+  const [scrollTop, setScrollTop] = useState(0);
 
+  // FETCH
   useEffect(() => {
-    fetch("https://dummyjson.com/products/category/mens-watches")
+    fetch("https://dummyjson.com/products?limit=100")
       .then((res) => {
-        if (!res.ok) {
-          throw new Error("Failed to fetch watches");
-        }
+        if (!res.ok) throw new Error("Failed to fetch");
         return res.json();
       })
-
       .then((data) => {
         setProducts(data.products);
         setLoading(false);
@@ -29,6 +27,8 @@ const WatchList = () => {
         setLoading(false);
       });
   }, []);
+
+  // DEBOUNCE
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedSearch(searchInput);
@@ -36,28 +36,35 @@ const WatchList = () => {
     return () => clearTimeout(timer);
   }, [searchInput]);
 
-  useEffect(() => {
-    setVisibleCount(4);
-  }, [debouncedSearch]);
-
+  // TOGGLE
   const handleToggle = useCallback((id) => {
     setOpenCardId((prev) => (prev === id ? null : id));
   }, []);
-  const increase = () => {
-    setVisibleCount((prev) => prev + 4);
-  };
 
+  // FILTER
   const filteredProducts = useMemo(() => {
-    products.filter((product) => {
-      const title = product.title.toLowerCase();
-      const query = debouncedSearch.toLowerCase();
-      return title.includes(query);
-    });
+    return products.filter((p) =>
+      p.title.toLowerCase().includes(debouncedSearch.toLowerCase())
+    );
   }, [products, debouncedSearch]);
 
-  const visibleProducts = useCallback(() => {
-    filteredProducts.slice(0, visibleCount);
-  }, [filteredProducts, visibleCount]);
+  // SCROLL
+  const handleScroll = (e) => {
+    setScrollTop(e.target.scrollTop);
+  };
+
+  // VIRTUALIZATION CORE
+  const itemHeight = 250;
+  const containerHeight = 500;
+  const buffer = 3;
+
+  const startIndex = Math.floor(scrollTop / itemHeight);
+  const visibleCount =
+    Math.ceil(containerHeight / itemHeight) + buffer;
+  const endIndex = startIndex + visibleCount;
+
+  const visibleItems = filteredProducts.slice(startIndex, endIndex);
+  const totalItems = filteredProducts.length;
 
   return (
     <div className="page">
@@ -69,49 +76,69 @@ const WatchList = () => {
           placeholder="Search watches"
         />
       </div>
+
       <main className="main">
         {loading && <SkeletonCards />}
+
         {!loading && error && (
           <div className="state">
-            <p>Error:{error}</p>
+            <p>Error: {error}</p>
           </div>
         )}
-        {!loading && !error && filteredProducts.length === 0 && (
-          <div className="state">
-            <p>Item not found</p>
-          </div>
-        )}
-        {!loading && !error && filteredProducts.length > 0 && (
-          <>
-            <div className="product">
-              {visibleProducts.map((item) => (
-                <Card
-                  key={item.id}
-                  id={item.id}
-                  title={item.title}
-                  price={item.price}
-                  stock={item.stock}
-                  image={item.thumbnail}
-                  isOpen={openCardId === item.id}
-                  handleToggle={handleToggle}
-                />
-              ))}
+
+        {!loading &&
+          !error &&
+          filteredProducts.length === 0 && (
+            <div className="state">
+              <p>Item not found</p>
             </div>
-            {visibleCount < filteredProducts.length && (
-              <div>
-                <button onClick={increase}>Load More</button>
+          )}
+
+        {!loading &&
+          !error &&
+          filteredProducts.length > 0 && (
+            <div
+              className="listContainer"
+              onScroll={handleScroll}
+            >
+              <div
+                style={{
+                  height: totalItems * itemHeight,
+                  position: "relative",
+                }}
+              >
+                {visibleItems.map((item, index) => {
+                  const actualIndex = startIndex + index;
+
+                  return (
+                    <div
+                      key={item.id}
+                      style={{
+                        position: "absolute",
+                        top: actualIndex * itemHeight,
+                        left: 0,
+                        right: 0,
+                      }}
+                    >
+                      <Card
+                        id={item.id}
+                        title={item.title}
+                        price={item.price}
+                        stock={item.stock}
+                        image={item.thumbnail}
+                        isOpen={openCardId === item.id}
+                        handleToggle={handleToggle}
+                      />
+                    </div>
+                  );
+                })}
               </div>
-            )}
-            {filteredProducts.length > 0 &&
-              visibleCount >= filteredProducts.length && (
-                <div>
-                  <p>-That's all for now-</p>
-                </div>
-              )}
-          </>
-        )}
+            </div>
+          )}
       </main>
     </div>
+    
   );
 };
+
 export default WatchList;

@@ -3,7 +3,7 @@ import React from "react";
 const SkeletonCards = () => {
   return (
     <div className="skeletonCard">
-      {Array(8)
+      {Array(15)
         .fill()
         .map((_, index) => (
           <div className="cards" key={index}>
