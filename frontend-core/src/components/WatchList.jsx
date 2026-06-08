@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import Card from "./Card";
 import SkeletonCards from "./SkeletonCards";
 
@@ -10,6 +16,8 @@ const WatchList = () => {
   const [error, setError] = useState(null);
   const [openCardId, setOpenCardId] = useState(null);
   const [scrollTop, setScrollTop] = useState(0);
+  const [positions, setPositions] = useState([]);
+  const heightRef = useRef({});
 
   // FETCH
   useEffect(() => {
@@ -44,7 +52,7 @@ const WatchList = () => {
   // FILTER
   const filteredProducts = useMemo(() => {
     return products.filter((p) =>
-      p.title.toLowerCase().includes(debouncedSearch.toLowerCase())
+      p.title.toLowerCase().includes(debouncedSearch.toLowerCase()),
     );
   }, [products, debouncedSearch]);
 
@@ -53,18 +61,82 @@ const WatchList = () => {
     setScrollTop(e.target.scrollTop);
   };
 
-  // VIRTUALIZATION CORE
-  const itemHeight = 250;
-  const containerHeight = 500;
-  const buffer = 3;
+  // useEffect(() => {
+  //   setPositions([]);
 
-  const startIndex = Math.floor(scrollTop / itemHeight);
-  const visibleCount =
-    Math.ceil(containerHeight / itemHeight) + buffer;
-  const endIndex = startIndex + visibleCount;
+  //   setScrollTop(0);
+  // }, [debouncedSearch]);
 
-  const visibleItems = filteredProducts.slice(startIndex, endIndex);
-  const totalItems = filteredProducts.length;
+  // virtualizaion + binary search
+
+  function findStartIndex(scrollTop, positions) {
+    let low = 0;
+    let high = positions.length - 1;
+    while (low <= high) {
+      const mid = Math.floor((low + high) / 2);
+      const current = positions[mid];
+      const next = positions[mid + 1] || Infinity;
+      if (current <= scrollTop && next >= scrollTop) return mid;
+      if (current > scrollTop) {
+        high = mid - 1;
+      } else {
+        low = mid + 1;
+      }
+    }
+    return 0;
+  }
+  const startIndex = findStartIndex(scrollTop, positions);
+
+  const containerHeight = window.innerHeight;
+  const viewportEnd = scrollTop + containerHeight;
+  let endIndex = startIndex;
+  while (endIndex < positions.length && positions[endIndex] < viewportEnd) {
+    endIndex++;
+  }
+
+  const visibleItems =
+    positions.length === 0
+      ? filteredProducts
+      : filteredProducts.slice(startIndex, endIndex);
+
+  function handleMeasure(id, height) {
+    heightRef.current[id] = height;
+    let total = 0;
+    const newpositions = [];
+    for (let i = 0; i < filteredProducts.length; i++) {
+      const item = filteredProducts[i];
+      newpositions.push(total);
+
+      const currentHeight = heightRef.current[item.id] || 0;
+
+      total += currentHeight;
+      
+    }
+
+    setPositions(newpositions);
+  }
+  const estimatedHeight = 180;
+  const lastIndex = filteredProducts.length - 1;
+  const lastItem =
+    filteredProducts.length > 0 ? filteredProducts[lastIndex] : { id: 0 };
+  const lastHeight = heightRef.current[lastItem.id] || 0;
+  const totalHeight =
+    positions.length > 0
+      ? positions[lastIndex] + lastHeight
+      : filteredProducts.length * estimatedHeight;
+  // console.log(filteredProducts.length - 1);
+  // console.log(
+  //   "filtered",
+  //   filteredProducts.length,
+  //   "position",
+  //   positions.length,
+  // );
+  // console.log({
+  //   scrollTop,
+  //   startIndex,
+  //   endIndex,
+  //   visible: visibleItems.length,
+  // });
 
   return (
     <div className="page">
@@ -86,58 +158,48 @@ const WatchList = () => {
           </div>
         )}
 
-        {!loading &&
-          !error &&
-          filteredProducts.length === 0 && (
-            <div className="state">
-              <p>Item not found</p>
-            </div>
-          )}
+        {!loading && !error && filteredProducts.length === 0 && (
+          <div className="state">
+            <p>Item not found</p>
+          </div>
+        )}
 
-        {!loading &&
-          !error &&
-          filteredProducts.length > 0 && (
-            <div
-              className="listContainer"
-              onScroll={handleScroll}
-            >
-              <div
-                style={{
-                  height: totalItems * itemHeight,
-                  position: "relative",
-                }}
-              >
-                {visibleItems.map((item, index) => {
-                  const actualIndex = startIndex + index;
-
-                  return (
-                    <div
-                      key={item.id}
-                      style={{
-                        position: "absolute",
-                        top: actualIndex * itemHeight,
-                        left: 0,
-                        right: 0,
-                      }}
-                    >
-                      <Card
-                        id={item.id}
-                        title={item.title}
-                        price={item.price}
-                        stock={item.stock}
-                        image={item.thumbnail}
-                        isOpen={openCardId === item.id}
-                        handleToggle={handleToggle}
-                      />
-                    </div>
-                  );
-                })}
-              </div>
+        {!loading && !error && filteredProducts.length > 0 && (
+          <div
+            className="listContainer"
+            onScroll={handleScroll}
+            style={{ height: "100vh", overflow: "auto" }}
+          >
+            <div style={{ height: totalHeight, position: "relative" }}>
+              {visibleItems.map((item, index) => {
+                const actualIndex = startIndex + index;
+                return (
+                  <div
+                    key={item.id}
+                    style={{
+                      position: "absolute",
+                      top: positions[actualIndex] || 0,
+                      width: "100%",
+                    }}
+                  >
+                    <Card
+                      id={item.id}
+                      title={item.title}
+                      price={item.price}
+                      stock={item.stock}
+                      image={item.thumbnail}
+                      isOpen={openCardId === item.id}
+                      handleToggle={handleToggle}
+                      handleMeasure={handleMeasure}
+                    />
+                  </div>
+                );
+              })}
             </div>
-          )}
+          </div>
+        )}
       </main>
     </div>
-    
   );
 };
 
