@@ -12,3 +12,5 @@ Rules:
 - Push code daily
 
 Failure = I stop lying to myself.
+
+docs: record FastAPI learning progress
