@@ -2,9 +2,19 @@
 
 A small in-memory task API built while learning Python, FastAPI, validation, HTTP status codes, and API testing.
 
+## Setup
+
+From this folder, install the project dependencies with:
+
+```powershell
+py -m pip install -r requirements.txt
+```
+
+The dependency list is in `requirements.txt`.
+
 ## Run the tests
 
-Install FastAPI, Pydantic, pytest, and HTTPX in your Python environment, then run:
+After installing the dependencies, run:
 
 ```powershell
 py -m pytest -q
