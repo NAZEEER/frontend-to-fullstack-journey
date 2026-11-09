@@ -2,8 +2,6 @@
 
 A small in-memory task-management API built while learning Python, FastAPI, request validation, HTTP status codes, and API testing.
 
-> Portfolio draft: this README is prepared for review and has not been published to GitHub.
-
 ## Features
 
 - Health check endpoint at `GET /health`.
